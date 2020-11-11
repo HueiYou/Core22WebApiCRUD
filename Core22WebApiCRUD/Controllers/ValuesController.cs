@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Core22WebApiCRUD.Helper;
+using Core22WebApiCRUD.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 
 namespace Core22WebApiCRUD.Controllers
 {
@@ -10,11 +13,24 @@ namespace Core22WebApiCRUD.Controllers
     [ApiController]
     public class ValuesController : ControllerBase
     {
+        private NorthwindContext _context;
+
+        public ValuesController(NorthwindContext context)
+        {
+            this._context = context;
+        }
+
         // GET api/values
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public JsonResult Get()
         {
-            return new string[] { "value1", "value2" };
+            var result = _context.Customers.Select(x => new
+            {
+                x.CustomerId,
+                x.CompanyName
+            }).Take(10).ToList();
+
+            return new JsonResult(result);
         }
 
         // GET api/values/5
