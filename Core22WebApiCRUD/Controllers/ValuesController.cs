@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Core22WebApiCRUD.Helper;
 using Core22WebApiCRUD.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 
@@ -20,7 +21,10 @@ namespace Core22WebApiCRUD.Controllers
             this._context = context;
         }
 
-        // GET api/values
+        /// <summary>
+        /// 取得10筆顧客資料
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public JsonResult Get()
         {
@@ -33,26 +37,47 @@ namespace Core22WebApiCRUD.Controllers
             return new JsonResult(result);
         }
 
-        // GET api/values/5
+        /// <summary>
+        /// 顯示value = 傳入值
+        /// </summary>
+        /// <remarks>
+        /// id須為整數
+        /// </remarks>
+        /// <param name="id">傳入值</param>
+        /// <returns>value = 傳入值</returns>
+        /// <response code="201">Returns the newly created item</response>
+        /// <response code="400">If the item is null</response>        
         [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<string> Get(int id)
         {
-            return "value";
+            return "value=" + id.ToString();
         }
 
         // POST api/values
         [HttpPost]
+        [ApiExplorerSettings(IgnoreApi = true)] //不產生該Api的swagger說明，但還是可以被呼叫
         public void Post([FromBody] string value)
         {
         }
 
-        // PUT api/values/5
+        /// <summary>
+        /// 更新資料
+        /// PUT api/values/5
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="value"></param>
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)
         {
         }
 
-        // DELETE api/values/5
+        /// <summary>
+        /// 刪除資料
+        /// DELETE api/values/5
+        /// </summary>
+        /// <param name="id"></param>
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
